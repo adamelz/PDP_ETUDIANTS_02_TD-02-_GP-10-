@@ -54,6 +54,23 @@ emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=
 
 DHT_Unified dht(SENSOR, DHTTYPE);
 
+WiFiClientSecure client;
+PubSubClient mqtt_client(client);
+
+void connect_wifi()
+{
+  Serial.print("Connecting to WiFi");
+  WiFi.begin(wifi_ssid, wifi_password);
+  // attempt to connect to Wifi network:
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    Serial.print(".");
+    // wait 2OOms for re-trying
+    delay(200);
+  }
+  Serial.println("\nConnected.");
+}
+
 void setup()
 {
   // Begin serial communication
