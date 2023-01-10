@@ -2,6 +2,16 @@
 #include <Adafruit_Sensor.h>
 #include <DHT.h>
 #include <DHT_U.h>
+#include "WiFiClientSecure.h"
+#include <PubSubClient.h>
+
+const char *wifi_ssid = "hugo";
+const char *wifi_password = "atxm8960";
+const char *mqtt_server = "27cc61dbaffc4da08cd0081cabd8cf01.s2.eu.hivemq.cloud";
+int mqtt_port = 8883;
+const char *mqtt_user = "ocres4ever";
+const char *mqtt_pass = "ocresse123";
+const char *client_id = "TD02_GP10";
 
 // Define the pins that we will use
 #define SENSOR 33
@@ -10,18 +20,18 @@
 
 DHT_Unified dht(SENSOR, DHTTYPE);
 
-void setup() {
+void setup()
+{
   // Begin serial communication
   Serial.begin(9600);
   delay(100);
 
   // Connect to WiFi
-  // ...
-  
-  // Configure MQTT server
-  // ...
+  //...
 
-  // Start listening to the DHT11
+  // Configure MQTT server
+  //...
+
   dht.begin();
 
   sensors_event_t event;
@@ -29,9 +39,12 @@ void setup() {
   // Get temperature event and print its value
   float temp_measure = -999.0;
   dht.temperature().getEvent(&event);
-  if (isnan(event.temperature)) {
+  if (isnan(event.temperature))
+  {
     Serial.println(F("Error reading temperature!"));
-  } else {
+  }
+  else
+  {
     Serial.print(F("Temperature: "));
     Serial.print(event.temperature);
     Serial.println(F("°C"));
@@ -41,14 +54,19 @@ void setup() {
   // Get humidity event and print its value.
   float relative_humidity_measure = -999.0;
   dht.humidity().getEvent(&event);
-  if (isnan(event.relative_humidity)) {
+  if (isnan(event.relative_humidity))
+  {
     Serial.println(F("Error reading humidity!"));
-  } else {
+  }
+  else
+  {
     Serial.print(F("Humidity: "));
     Serial.print(event.relative_humidity);
     Serial.println(F("%"));
     relative_humidity_measure = event.relative_humidity;
   }
+
+  // Start listening to the DHT11
 
   // Send data to the broker with MQTT
   // ...
@@ -58,6 +76,7 @@ void setup() {
   ESP.deepSleep(5e6);
 }
 
-void loop() {
+void loop()
+{
   // Not needed anymore, the function is kept so Platformio does not complain.
 }
