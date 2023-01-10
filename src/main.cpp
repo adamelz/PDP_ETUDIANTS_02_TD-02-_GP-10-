@@ -78,10 +78,11 @@ void setup()
   delay(100);
 
   // Connect to WiFi
-  //...
+  connect_wifi;
 
   // Configure MQTT server
-  //...
+  mqtt_client.setServer(mqtt_server, mqtt_port);
+  client.setCACert(ca_cert);
 
   dht.begin();
 
@@ -116,6 +117,12 @@ void setup()
     Serial.println(F("%"));
     relative_humidity_measure = event.relative_humidity;
   }
+
+  if (mqtt_client.connect(client_id, mqtt_user, mqtt_pass))
+  {
+    mqtt_client.publish("TD02_GP10/temp", String(temp_measure).c_str());
+    mqtt_client.publish("TD02_GP10/relhum", String(relative_humidity_measure).c_str());
+  };
 
   // Start listening to the DHT11
 
